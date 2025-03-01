@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bookstore</title>
+    <style>
+        .step-links {
+            margin: 0 5px;
+        }
+
+        .current {
+            margin: 0 10px;
+        }
+
+        button {
+            padding: 2px 10px;
+            border: 1px solid #ccc;
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #ddd;
+        }
+
+        button a {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+<h1>Books</h1>
+{% if user.is_authenticated %}
+    <p>Вы вошли как {{ user.username }}. <a href="{% url 'logout' %}">Выйти</a></p>
+{% else %}
+    <p><a href="{% url 'login' %}">Войти</a></p>
+{% endif %}
+<ul>
+    {% for book in page_obj %}
+    <li>
+        "{{book.title}}"<br>
+        <button><a href="{% url 'book_detail' book.pk %}">Detail</a></button>
+        {% if user.is_authenticated and user.userprofile.role == 'admin' %}
+        <button><a href="{% url 'book_edit' book.pk %}">Edit</a></button>
+        <button><a href="{% url 'book_delete' book.pk %}">Delete</a></button>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% if user.is_authenticated %}
+<button><a href="{% url 'book_new' %}">Add a book</a></button>
+{% endif %}
+<br>
+<br>
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <button><a href="?page=1">&laquo; To the beginning</a></button>
+            <button><a href="?page={{ page_obj.previous_page_number }}">Previous</a></button>
+        {% endif %}
+    </span>
+
+    <span class="current">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+
+    <span class="step-links">
+        {% if page_obj.has_next %}
+            <button><a href="?page={{ page_obj.next_page_number }}">Next</a></button>
+            <button><a href="?page={{ page_obj.paginator.num_pages }}">To the end &raquo;</a></button>
+        {% endif %}
+
+    </span>
+</div>
+
+</body>
+</html>
+
