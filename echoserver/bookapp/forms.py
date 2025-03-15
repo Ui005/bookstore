@@ -30,3 +30,14 @@ class CustomUserCreationForm(UserCreationForm):
         profile.role = self.cleaned_data['role']
         profile.save()
         return user
+
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name']
+
+class CheckoutForm(forms.Form):
+    address = forms.CharField(max_length=200)
+    phone = forms.CharField(max_length=20)
