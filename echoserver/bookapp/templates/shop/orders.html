@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+</head>
+<body>
+<h1>Мои заказы</h1>
+<ul>
+    {% for order in orders %}
+        <li>
+            <h3>Заказ от {{ order.created_at }}</h3>
+            <p>Стоимость: {{ order.total_price }} руб.</p>
+            <ul>
+                {% for item in order.orderitem_set.all %}
+                    <li>"{{ item.product.title }}" - {{ item.quantity }} x {{ item.price }} руб.</li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'book_list' %}">Вернуться в каталог</a>
+</body>
+</html>
